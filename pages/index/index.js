@@ -66,23 +66,20 @@ Page({
       })
       getApp().globalData.userinfo = e.detail.userinfo;
       wx.request({
-        url: app.globalData.posttp + app.globalData.postdir + "/wechat/php/if_register.php",
-        data: {
-          openid: app.globalData.openid,
-        },
+        url: app.globalData.posttp + app.globalData.postdir + "/api/if_register",
         header: {
-          'content-type': 'application/x-www-form-urlencoded'
+          'openid': app.globalData.openid
         },
-        method: "POST",
+        method: "GET",
         success: function (result) {
           result = result.data;
-          if (result.status == 0) {
+          if (result.code == 0) {
             //保存用户信息到数据库
             that.setData({
               content: "正在注册"
             })
             wx.request({
-              url: app.globalData.posttp + app.globalData.postdir + "/wechat/php/upload_customer.php",
+              url: app.globalData.posttp + app.globalData.postdir + "/api/account/register",
               data: {
                 openid: app.globalData.openid,
                 username: e.detail.userInfo.nickName,
