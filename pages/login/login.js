@@ -9,7 +9,11 @@ Page({
     hasUserInfo: false,
     hidden: true,
     content: "",
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    email:"",
+    password:"",
+    confirm_password:"",
+    agree:false,
   },
   //事件处理函数
   toast: function () {
@@ -55,6 +59,13 @@ Page({
     that.setData({
       hidden: false
     })
+    if(this.email == "")return
+    if(this.password != this.confirm_password || this.password =="" || this.confirm_password == ""){
+      return 
+    }
+    if (!this.agree){
+      return
+    }
     if (e.detail.errMsg == "getUserInfo:fail auth deny") {
       //拒绝授权的情况
       that.setData({
@@ -84,7 +95,9 @@ Page({
                 openid: app.globalData.openid,
                 username: e.detail.userInfo.nickName,
                 gender: e.detail.userInfo.gender,
-                head: e.detail.userInfo.avatarUrl
+                head: e.detail.userInfo.avatarUrl,
+                emali:that.email,
+                password:that.password
               },
               header: {
                 'content-type': 'application/x-www-form-urlencoded'

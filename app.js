@@ -1,14 +1,14 @@
 //app.js
 App({
   globalData: {
-    postdir: 'localhost:5000',
-    posttp: "http://",
+    postdir: 'lgt1212.cn:4000',
+    posttp: "https://",
     personInfo: "",
     openid: "",
     session_key: "",
     userinfo_success: "",
-    appid: "wxe1e434222057b10e",
-    appsecret: "9f7e0028828589854d16308d3c935d53",
+    appid: "wx77fddbff5a867762",
+    appsecret: "d3ed78e1e541f44b47f6e4a3e948fa82",
   },
   onLaunch: function () {
     var that = this
@@ -23,18 +23,14 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
           var APPID = 'wx77fddbff5a867762';
-          var APPSECRET = '0549214ad1aa10e68205bb8414a75e50';
-          var getopenid_url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APPID + "&secret=" + APPSECRET + "&js_code=" + res.code + "&grant_type=authorization_code";
+          var APPSECRET = 'd3ed78e1e541f44b47f6e4a3e948fa82';
           wx.request({
             method: "GET",
-            url: "http://localhost:5000/api/account/wx_openid",
+            url: "https://www.lgt1212.cn:4000/api/account/wx_openid",
             data: {
               code: res.code,
-              appid:that.appid,
-              secret:that.appsecret
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
+              appid: APPID,
+              secret: APPSECRET
             },
             complete: function (res) {
               var opid = res.data.openid //返回openid
