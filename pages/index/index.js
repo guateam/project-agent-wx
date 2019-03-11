@@ -7,6 +7,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
+    hidden:true,
+    content:"",
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   //事件处理函数
@@ -48,12 +50,63 @@ Page({
       })
     }
   },
-  getUserInfo: function(e) {
+  UserInfo: function(e) {
     console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+    that.setData({
+      hidden: false
     })
+    if (e.detail.errMsg == "getUserInfo:fail auth deny") {
+      //拒绝授权的情况
+      that.setData({
+        hidden: true
+      })
+    } else {
+      that.setData({
+        content: "检查是否注册"
+      })
+      getApp().globalData.userinfo = e.detail.userinfo;
+      wx.request({
+        url: app.globalData.posttp + app.globalData.postdir + "/api/if_register",
+        header: {
+          'openid': app.globalData.openid
+        },
+        method: "GET",
+        success: function (result) {
+          result = result.data;
+          if (result.code == 0) {
+            //保存用户信息到数据库
+            that.setData({
+              content: "正在注册"
+            })
+            wx.request({
+              url: app.globalData.posttp + app.globalData.postdir + "/api/account/register",
+              data: {
+                openid: app.globalData.openid,
+                username: e.detail.userInfo.nickName,
+                gender: e.detail.userInfo.gender,
+                head: e.detail.userInfo.avatarUrl
+              },
+              header: {
+                'content-type': 'application/x-www-form-urlencoded'
+              },
+              method: "POST",
+              success: function (res) {
+                res = res.data;
+                wx.switchTab({
+                  url: '../index/index'
+                })
+              }
+            })
+          } else {
+            that.setData({
+              content: "正在跳转到主页"
+            })
+            wx.switchTab({
+              url: '../index/index'
+            })
+          }
+        }
+      })
+    }
   }
 })

@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container">
+<!-- <view class="container">
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" bindtap="toast"> 获取头像昵称 </button>
     <block wx:else>
@@ -10,4 +10,11 @@
   <view class="usermotto">
     <button bindtap="toast"> 获取头像昵称 </button>
   </view>
+</view> -->
+<view class='pic-box'>
+<image src="{{posttp}}{{postdir}}/src/assets/logo.png" style="width:100%"></image>
 </view>
+<button open-type="getUserInfo" bindgetuserinfo="userinfo" class="weui-btn" type="primary"> 请授权</button>
+<loading hidden="{{hidden}}">
+      {{content}}
+</loading>
