@@ -9,6 +9,8 @@ App({
     userinfo_success: "",
     appid: "wx77fddbff5a867762",
     appsecret: "d3ed78e1e541f44b47f6e4a3e948fa82",
+    userInfo: null,
+    is_register:'unknown',
   },
   onLaunch: function () {
     var that = this
@@ -16,33 +18,7 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
-    // 登录
-    wx.login({
-      complete: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.code) {
-          var APPID = 'wx77fddbff5a867762';
-          var APPSECRET = 'd3ed78e1e541f44b47f6e4a3e948fa82';
-          wx.request({
-            method: "GET",
-            url: "https://www.lgt1212.cn:4000/api/account/wx_openid",
-            data: {
-              code: res.code,
-              appid: APPID,
-              secret: APPSECRET
-            },
-            complete: function (res) {
-              var opid = res.data.openid //返回openid
-              that.globalData.openid = opid;
-              that.globalData.session_key = res.data.session_key
-            }
-          })
-        } else {
-          console.log('获取用户登录态失败！' + res.errMsg)
-        }
-      }
-    })
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -64,7 +40,4 @@ App({
       }
     })
   },
-  globalData: {
-    userInfo: null
-  }
 })

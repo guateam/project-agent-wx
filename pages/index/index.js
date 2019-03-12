@@ -8,105 +8,89 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     hidden:true,
-    content:"",
+    content:"正在获取用户信息...",
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
+  onShow:function(){
+    if(app.globalData.if_register === 'not'){
+      wx.navigateTo({
+        url: '../login/login',
+      })
+    }
+  },
   //事件处理函数
-  toast: function () {
-    wx.navigateTo({
-      url: '../main/main'
-    })
-  },
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
   onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
-  },
-  UserInfo: function(e) {
-    console.log(e)
+    let that = this
     that.setData({
-      hidden: false
+      content: "正在尝试登陆..."
     })
-    if (e.detail.errMsg == "getUserInfo:fail auth deny") {
-      //拒绝授权的情况
-      that.setData({
-        hidden: true
-      })
-    } else {
-      that.setData({
-        content: "检查是否注册"
-      })
-      getApp().globalData.userinfo = e.detail.userinfo;
-      wx.request({
-        url: app.globalData.posttp + app.globalData.postdir + "/api/if_register",
-        header: {
-          'openid': app.globalData.openid
-        },
-        method: "GET",
-        success: function (result) {
-          result = result.data;
-          if (result.code == 0) {
-            //保存用户信息到数据库
-            that.setData({
-              content: "正在注册"
-            })
-            wx.request({
-              url: app.globalData.posttp + app.globalData.postdir + "/api/account/register",
-              data: {
-                openid: app.globalData.openid,
-                username: e.detail.userInfo.nickName,
-                gender: e.detail.userInfo.gender,
-                head: e.detail.userInfo.avatarUrl
-              },
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              method: "POST",
-              success: function (res) {
-                res = res.data;
-                wx.switchTab({
-                  url: '../index/index'
-                })
-              }
-            })
-          } else {
-            that.setData({
-              content: "正在跳转到主页"
-            })
-            wx.switchTab({
-              url: '../index/index'
-            })
-          }
+    wx.getUserInfo({
+      success: res => {
+        app.globalData.userInfo = res.userInfo
+        console.log(app.globalData.userInfo)
+      }
+    })
+    // 登录
+    wx.login({
+      complete: res => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (res.code) {
+          var APPID = 'wx77fddbff5a867762';
+          var APPSECRET = 'd3ed78e1e541f44b47f6e4a3e948fa82';
+          wx.request({
+            method: "GET",
+            url: "https://www.lgt1212.cn:4000/api/account/wx_openid",
+            data: {
+              code: res.code,
+              appid: APPID,
+              secret: APPSECRET
+            },
+            complete: function (res) {
+              that.setData({
+                content: "正在检测是否注册..."
+              })
+              var opid = res.data.openid //返回openid
+              app.globalData.openid = opid;
+              app.globalData.session_key = res.data.session_key
+              console.log(app.globalData.openid)
+              wx.request({
+                url:app.globalData.posttp + app.globalData.postdir + "/api/account/if_register",
+                data: {
+                  'openid': app.globalData.openid
+                },
+                method: "GET",
+                success: function (result) {
+                  result = result.data;
+                  if (result.code == 0) {
+                    //跳转到注册页面
+                    that.setData({
+                      content: "正在跳转到注册页..."
+                    })
+                    app.globalData.if_register = 'not'
+                    wx.navigateTo({
+                      url: '../login/login',
+                    })
+                  } else if(result.code == 1) {
+                    that.setData({
+                      content: "正在跳转到主页"
+                    })
+                    app.globalData.if_register = 'yes'
+                    wx.navigateTo({
+                      url: '../main/main',
+                    })
+                  } else{
+                    that.setData({
+                      content: "请求出错"
+                    })
+                  }
+                }
+              })
+            }
+          })
+        } else {
+          console.log('获取用户登录态失败！' + res.errMsg)
         }
-      })
-    }
-  }
+      }
+    })
+  },
 })
