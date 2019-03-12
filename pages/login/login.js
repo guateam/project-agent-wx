@@ -80,7 +80,7 @@ Page({
         method: "POST",
         success: function (res) {
           res = res.data;
-          wx.switchTab({
+          wx.navigateTo({
             url: '../main/main'
           })
         }
