@@ -15,16 +15,8 @@ Page({
     confirm_password:"",
     agree:false,
   },
-  //事件处理函数
-  toast: function () {
-    wx.navigateTo({
-      url: '../main/main'
-    })
-  },
-  bindViewTap: function () {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+  bindagreechange: function (e) {
+    this.data.agree = !this.data.agree;
   },
   onLoad: function () {
     if (app.globalData.userInfo) {
@@ -56,70 +48,75 @@ Page({
   },
   UserInfo: function (e) {
     console.log(e)
-    that.setData({
-      hidden: false
-    })
-    if(this.email == "")return
-    if(this.password != this.confirm_password || this.password =="" || this.confirm_password == ""){
+    var that = this
+    if(this.data.email == "")return
+    if( this.data.password != this.data.confirm_password || 
+        this.data.password =="" || this.data.confirm_password == ""){
       return 
     }
-    if (!this.agree){
+    if (!this.data.agree){
       return
     }
     if (e.detail.errMsg == "getUserInfo:fail auth deny") {
       //拒绝授权的情况
-      that.setData({
-        hidden: true
-      })
+
     } else {
       that.setData({
-        content: "检查是否注册"
+        hidden: false,
+        content: "正在注册..."
       })
-      getApp().globalData.userinfo = e.detail.userinfo;
       wx.request({
-        url: app.globalData.posttp + app.globalData.postdir + "/api/if_register",
-        header: {
-          'openid': app.globalData.openid
+        url: app.globalData.posttp + app.globalData.postdir + "/api/account/wx_register",
+        data: {
+          openid: app.globalData.openid,
+          username: e.detail.userInfo.nickName,
+          head: e.detail.userInfo.avatarUrl,
+          emali: that.email,
+          password: that.password
         },
-        method: "GET",
-        success: function (result) {
-          result = result.data;
-          if (result.code == 0) {
-            //保存用户信息到数据库
-            that.setData({
-              content: "正在注册"
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: "POST",
+        success: function (res) {
+          res = res.data;
+          if(res.code == 1){
+            app.globalData.if_register = 'yes'
+            wx.navigateTo({
+              url: '../main/main'
             })
-            wx.request({
-              url: app.globalData.posttp + app.globalData.postdir + "/api/account/register",
-              data: {
-                openid: app.globalData.openid,
-                username: e.detail.userInfo.nickName,
-                gender: e.detail.userInfo.gender,
-                head: e.detail.userInfo.avatarUrl,
-                emali:that.email,
-                password:that.password
-              },
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              method: "POST",
-              success: function (res) {
-                res = res.data;
-                wx.switchTab({
-                  url: '../index/index'
-                })
-              }
+          }else if (res.code == -1) {
+            wx.showToast({
+              title: '新建账户失败',
+              icon: 'none',
+              duration: 2000
             })
-          } else {
-            that.setData({
-              content: "正在跳转到主页"
+
+          } else if (res.code == -2) {
+            wx.showToast({
+              title: '账户绑定微信失败',
+              icon: 'none',
+              duration: 2000
             })
-            wx.switchTab({
-              url: '../index/index'
+
+          } else if (res.code == -3){
+            wx.showToast({
+              title: '该邮箱已经被绑定',
+              icon: 'none',
+              duration: 2000
+            })
+          } else if (res.code == -4) {
+            wx.showToast({
+              title: '账户密码错误',
+              icon: 'none',
+              duration: 2000
             })
           }
+
         }
       })
     }
   }
 })
+
+
