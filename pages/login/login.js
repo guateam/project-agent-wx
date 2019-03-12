@@ -66,7 +66,7 @@ Page({
         content: "正在注册..."
       })
       wx.request({
-        url: app.globalData.posttp + app.globalData.postdir + "/api/account/register",
+        url: app.globalData.posttp + app.globalData.postdir + "/api/account/wx_register",
         data: {
           openid: app.globalData.openid,
           username: e.detail.userInfo.nickName,
@@ -80,9 +80,39 @@ Page({
         method: "POST",
         success: function (res) {
           res = res.data;
-          wx.navigateTo({
-            url: '../main/main'
-          })
+          if(res.code == 1){
+            app.globalData.if_register = 'yes'
+            wx.navigateTo({
+              url: '../main/main'
+            })
+          }else if (res.code == -1) {
+            wx.showToast({
+              title: '新建账户失败',
+              icon: 'none',
+              duration: 2000
+            })
+
+          } else if (res.code == -2) {
+            wx.showToast({
+              title: '账户绑定微信失败',
+              icon: 'none',
+              duration: 2000
+            })
+
+          } else if (res.code == -3){
+            wx.showToast({
+              title: '该邮箱已经被绑定',
+              icon: 'none',
+              duration: 2000
+            })
+          } else if (res.code == -4) {
+            wx.showToast({
+              title: '账户密码错误',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+
         }
       })
     }

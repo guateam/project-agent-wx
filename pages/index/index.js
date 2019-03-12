@@ -61,7 +61,7 @@ Page({
                 method: "GET",
                 success: function (result) {
                   result = result.data;
-                  if (result.code == 0) {
+                  if (result.code == 0 || result.code == -1) {
                     //跳转到注册页面
                     that.setData({
                       content: "正在跳转到注册页..."
