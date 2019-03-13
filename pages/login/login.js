@@ -10,10 +10,10 @@ Page({
     hidden: true,
     content: "",
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    email:"ZhuanPlus@163.com",
-    password:"123456",
-    confirm_password:"123456",
-    agree:true,
+    email:"",
+    password:"",
+    confirm_password:"",
+    agree:false,
   },
   bindagreechange: function (e) {
     this.data.agree = !this.data.agree;
@@ -81,7 +81,7 @@ Page({
         content: "正在注册..."
       })
       wx.request({
-        url: "http://localhost:5000/api/account/wx_register",
+        url:  app.globalData.posttp + app.globalData.postdir + "/api/account/wx_register",
         data: {
           openid: app.globalData.openid,
           nickname: e.detail.userInfo.nickName,
