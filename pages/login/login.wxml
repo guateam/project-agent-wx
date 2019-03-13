@@ -7,53 +7,51 @@
       错误提示
     </view>
     <view style="display: flex;align-items: center;justify-content: center;margin-bottom:95px;margin-top:40px">
-     <image
-          style="width: 180px; height: 180px; background-color: #eeeeee;"
-          src="../../images/logo.png"
-        ></image>
+      <image style="width: 180px; height: 180px; background-color: #eeeeee;" src="../../images/logo.png"></image>
     </view>
-    <view class="weui-cells__title">绑定邮箱</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">邮箱</view>
+    <form bindsubmit='UserInfo'>
+      <view class="weui-cells__title">绑定邮箱</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">邮箱</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" type="text" name="email" placeholder="请输入邮箱" auto-focus/>
+          </view>
         </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" bindinput="email" placeholder="请输入邮箱" />
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">密码</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input type='password' class="weui-input" name="password" placeholder="请输入密码" />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">确认密码</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input type='password' class="weui-input" name="confirm_password" placeholder="请确认密码" />
+          </view>
         </view>
       </view>
-      <view class="weui-cell weui-cell_input weui-cell_vcode">
-        <view class="weui-cell__hd">
-          <view class="weui-label">密码</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input type='password' class="weui-input" bindinput="password" placeholder="请输入密码" />
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input weui-cell_vcode">
-        <view class="weui-cell__hd">
-          <view class="weui-label">确认密码</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input type='password' class="weui-input" bindinput="confirm_password" placeholder="请确认密码" />
-        </view>
-      </view>
-    </view>
 
-    <checkbox-group bindchange="bindagreechange">
-      <label class="weui-agree" for="weuiAgree">
-        <view class="weui-agree__text">
-          <checkbox id="weuiAgree" value="{{agree}}" checked = "{{agree}}"/>
-          阅读并同意
-          <navigator url="" class="weui-agree__link">《相关条款》</navigator>
-        </view>
-      </label>
-    </checkbox-group>
-    <view class="weui-btn-area">
-      <button open-type="getUserInfo" bindgetuserinfo="UserInfo" class="weui-btn" type="primary"> 确定            </button>
-    </view>
+      <checkbox-group bindchange="bindagreechange">
+        <label class="weui-agree" for="weuiAgree">
+          <view class="weui-agree__text">
+            <checkbox id="weuiAgree" value="{{agree}}" checked="{{agree}}" /> 阅读并同意
+            <navigator url="" class="weui-agree__link">《相关条款》</navigator>
+          </view>
+        </label>
+      </checkbox-group>
+      <view class="weui-btn-area">
+        <button open-type="getUserInfo" formType="submit"  class="weui-btn" type="primary"> 确定 </button>
+      </view>
+    </form>
     <loading hidden="{{hidden}}">
       {{content}}
-</loading>
+    </loading>
   </view>
 </view>
