@@ -18,6 +18,21 @@ Page({
   bindagreechange: function (e) {
     this.data.agree = !this.data.agree;
   },
+  email_change:function(e){
+    this.setData({
+      email:e.detail.value
+    })
+  },
+  password_change: function (e) {
+    this.setData({
+      password: e.detail.value
+    })
+  },
+  confirm_password_change: function (e) {
+    this.setData({
+      confirm_password: e.detail.value
+    })
+  },
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
