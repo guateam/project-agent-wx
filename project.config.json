@@ -40,9 +40,10 @@
 			"current": 0,
 			"list": [
 				{
-					"id": -1,
-					"name": "login",
-					"pathName": "pages/login/login"
+					"id": 0,
+					"name": "main",
+					"pathName": "pages/main/main",
+					"query": ""
 				}
 			]
 		}
