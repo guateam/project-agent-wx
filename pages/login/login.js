@@ -86,8 +86,8 @@ Page({
           openid: app.globalData.openid,
           username: e.detail.userInfo.nickName,
           head: e.detail.userInfo.avatarUrl,
-          emali: that.email,
-          password: that.password
+          emali: this.data.email,
+          password: this.data.password
         },
         header: {
           'content-type': 'application/x-www-form-urlencoded'
