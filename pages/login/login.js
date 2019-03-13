@@ -49,6 +49,10 @@ Page({
   UserInfo: function (e) {
     console.log(e)
     var that = this
+    this.data.email = e.detail.value.email
+    this.data.password = e.detail.value.password
+    this.data.confirm_password = e.detail.value.confirm_password
+    console.log(this.data)
     if(this.data.email == "")return
     if( this.data.password != this.data.confirm_password || 
         this.data.password =="" || this.data.confirm_password == ""){
@@ -69,8 +73,8 @@ Page({
         url: app.globalData.posttp + app.globalData.postdir + "/api/account/wx_register",
         data: {
           openid: app.globalData.openid,
-          username: e.detail.userInfo.nickName,
-          head: e.detail.userInfo.avatarUrl,
+          // username: e.detail.userInfo.nickName,
+          // head: e.detail.userInfo.avatarUrl,
           emali: that.email,
           password: that.password
         },
