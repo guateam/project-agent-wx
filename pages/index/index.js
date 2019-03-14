@@ -54,7 +54,7 @@ Page({
               app.globalData.session_key = res.data.session_key
               console.log(app.globalData.openid)
               wx.request({
-                url:app.globalData.posttp + app.globalData.postdir + "/api/account/if_register",
+                url: app.globalData.posttp + app.globalData.postdir + "/api/account/if_register",
                 data: {
                   'openid': app.globalData.openid
                 },
@@ -74,9 +74,10 @@ Page({
                     that.setData({
                       content: "正在跳转到主页"
                     })
+                    let token = result.data
                     app.globalData.if_register = 'yes'
                     wx.navigateTo({
-                      url: '../main/main',
+                      url: '../main/main?token='+token,
                     })
                   } else{
                     that.setData({
