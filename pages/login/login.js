@@ -98,7 +98,7 @@ Page({
           if(res.code == 1){
             app.globalData.if_register = 'yes'
             let token = res.data
-            wx.navigateTo({
+            wx.redirectTo({
               url: '../main/main?token=' + token
             })
           }else if (res.code == -1) {
