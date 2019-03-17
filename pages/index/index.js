@@ -13,7 +13,7 @@ Page({
   },
   onShow:function(){
     if(app.globalData.if_register === 'not'){
-      wx.navigateTo({
+      wx.redirectTo({
         url: '../login/login',
       })
     }
@@ -67,7 +67,7 @@ Page({
                       content: "正在跳转到注册页..."
                     })
                     app.globalData.if_register = 'not'
-                    wx.navigateTo({
+                    wx.redirectTo({
                       url: '../login/login',
                     })
                   } else if(result.code == 1) {
@@ -76,7 +76,7 @@ Page({
                     })
                     let token = result.data
                     app.globalData.if_register = 'yes'
-                    wx.navigateTo({
+                    wx.redirectTo({
                       url: '../main/main?token='+token,
                     })
                   } else{
