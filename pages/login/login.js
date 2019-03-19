@@ -64,9 +64,21 @@ Page({
   UserInfo: function (e) {
     console.log(e)
     var that = this
-    if(this.data.email == "")return
+    if(this.data.email == ""){
+      wx.showToast({
+        title: '邮箱不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     if( this.data.password != this.data.confirm_password || 
         this.data.password =="" || this.data.confirm_password == ""){
+        wx.showToast({
+          title: '密码不能为空或两次密码不一致',
+          icon: 'none',
+          duration: 2000
+        })
       return 
     }
     if (!this.data.agree){
@@ -76,6 +88,24 @@ Page({
       //拒绝授权的情况
 
     } else {
+      let reg = /^[0-9a-zA-Z]{0,19}@[0-9a-zA-Z]{1,13}\.[com, cn, net]{1,3}$/
+      let flag = reg.test(that.data.email)
+      if(!flag){
+        wx.showToast({
+          title: '邮箱格式不正确',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      if (app.globalData.openid == ""){
+        wx.showToast({
+          title: '获取用户凭证失败，请重启小程序',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       that.setData({
         hidden: false,
         content: "正在注册..."

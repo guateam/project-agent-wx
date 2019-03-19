@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/main/main",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/pay",
+    "pages/pay/pay"
   ],
   "window": {
     "backgroundTextStyle": "light",
