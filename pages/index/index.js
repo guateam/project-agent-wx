@@ -39,7 +39,7 @@ Page({
           var APPSECRET = 'd3ed78e1e541f44b47f6e4a3e948fa82';
           wx.request({
             method: "GET",
-            url: "https://lgt1212.cn:4000/api/account/wx_openid",
+            url: "https://lgt1212.cn/api/account/wx_openid",
             data: {
               code: res.code,
               appid: APPID,
