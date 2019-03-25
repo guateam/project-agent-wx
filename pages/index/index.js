@@ -35,8 +35,8 @@ Page({
       complete: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
-          var APPID = 'wx77fddbff5a867762';
-          var APPSECRET = 'd3ed78e1e541f44b47f6e4a3e948fa82';
+          var APPID = 'wxf763bf008cf92f50';
+          var APPSECRET = '278b90b5afef6609a7d69d4cedb993c9';
           wx.request({
             method: "GET",
             url: "https://lgt1212.cn/api/account/wx_openid",
